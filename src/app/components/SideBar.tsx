@@ -5,12 +5,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { FaChartPie, FaCog, FaHome, FaMoneyBill } from 'react-icons/fa'
-import { FaMoneyBillTransfer } from "react-icons/fa6";
-import { MdOutlineDocumentScanner } from "react-icons/md";
-import { GrDocumentStore } from "react-icons/gr";
-import { BsGraphUp } from "react-icons/bs";
-import { GoGoal } from "react-icons/go";
+import { HandCoins, DiamondPercent, ChartColumnDecreasing, House, Goal, Landmark } from 'lucide-react';
 import Image from 'next/image'
 
 type Props = {}
@@ -25,7 +20,7 @@ const SideBar = (props: Props) => {
 
             <nav className="flex flex-col gap-2">
                 <a href="#" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
-                    <FaHome className="text-lg text-primaryColor" />
+                    <House className="text-primaryColor" />
                     <span>Anasayfa</span>
                 </a>
 
@@ -33,11 +28,11 @@ const SideBar = (props: Props) => {
                     <span>Genel Bakış</span>
                 </div>
                 <a href="#" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition mt-1">
-                    <GrDocumentStore className="text-lg text-yellow-500" />
+                    <DiamondPercent className="text-yellow-500" />
                     Özetler
                 </a>
-                <a href="#" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
-                    <BsGraphUp className="text-lg text-red-500" />
+                <a href="#" className="flex items-center gap-2 px-4 py-1 ml-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
+                    <ChartColumnDecreasing className="text-red-500" />
                     Grafikler
                 </a>
 
@@ -45,15 +40,15 @@ const SideBar = (props: Props) => {
                     <span>Yönetim</span>
                 </div>
                 <a href="#" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition mt-1">
-                    <FaMoneyBill className="text-lg text-green-500" />
+                    <HandCoins className="text-green-500" />
                     Gelirler
                 </a>
                 <a href="#" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
-                    <FaMoneyBillTransfer className="text-lg text-teal-500" />
+                    <Landmark className="text-teal-500" />
                     Giderler
                 </a>
                 <a href="#" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
-                    <GoGoal className="text-lg text-purple-500" />
+                    <Goal className="text-purple-500" />
                     Hedefler
                 </a>
             </nav>
