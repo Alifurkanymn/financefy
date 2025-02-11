@@ -43,7 +43,7 @@ const SideBar = (props: Props) => {
                     <HandCoins className="text-green-500" />
                     Gelirler
                 </a>
-                <a href="#" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
+                <a href="/expenses" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
                     <Landmark className="text-teal-500" />
                     Giderler
                 </a>
