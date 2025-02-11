@@ -19,7 +19,7 @@ const SideBar = (props: Props) => {
             </a>
 
             <nav className="flex flex-col gap-2">
-                <a href="#" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
+                <a href='/' className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
                     <House className="text-primaryColor" />
                     <span>Anasayfa</span>
                 </a>
@@ -27,7 +27,7 @@ const SideBar = (props: Props) => {
                 <div className="px-4 text-sm font-semibold text-primaryColor mt-4">
                     <span>Genel Bakış</span>
                 </div>
-                <a href="#" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition mt-1">
+                <a href="/summary" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition mt-1">
                     <DiamondPercent className="text-yellow-500" />
                     Özetler
                 </a>
@@ -39,7 +39,7 @@ const SideBar = (props: Props) => {
                 <div className="px-4 text-sm font-semibold text-primaryColor mt-4">
                     <span>Yönetim</span>
                 </div>
-                <a href="#" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition mt-1">
+                <a href="/incomes" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition mt-1">
                     <HandCoins className="text-green-500" />
                     Gelirler
                 </a>
