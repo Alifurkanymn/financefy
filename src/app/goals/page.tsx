@@ -22,41 +22,50 @@ import {
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-type Expenses = {
+type Goals = {
     id: number;
     title: string;
-    amount: number;
+    targetAmount: number;
+    currency: string,
+    startDate: string,
+    endDate: string,
+    currentSaving: number,
     category: string;
-    date: string;
     description: string;
-    recurrence: string;
+    status: string;
 };
 
-const Expenses = () => {
-    const [expenses, setExpenses] = useState < Expenses[] > ([]);
+const Goals = (props: Props) => {
+    const [goals, setGoals] = useState < Goals[] > ([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [newExpenses, setNewExpenses] = useState < Expenses > ({
+    const [newGoal, setNewGoal] = useState < Goals > ({
         id: 0,
         title: '',
-        amount: 0,
+        targetAmount: 0,
+        currency: '',
+        startDate: '',
+        endDate: '',
+        currentSaving: 0,
         category: '',
-        date: '',
         description: '',
-        recurrence: '',
-    });
+        status: '',
+    })
 
-    const handleAddExpenses = () => {
-        setExpenses([...expenses, { ...newExpenses, id: expenses.length + 1 }]);
+    const handleAddGoal = () => {
+        setGoals([...goals, { ...newGoal, id: goals.length + 1 }]);
         setIsDialogOpen(false);
-        setNewExpenses({
+        setNewGoal({
             id: 0,
             title: '',
-            amount: 0,
+            targetAmount: 0,
+            currency: '',
+            startDate: '',
+            endDate: '',
+            currentSaving: 0,
             category: '',
-            date: '',
             description: '',
-            recurrence: '',
+            status: '',
         });
     };
 
@@ -64,21 +73,23 @@ const Expenses = () => {
         setSearchTerm(event.target.value);
     };
 
-    const filteredExpenses = expenses.filter((income) =>
-        income.title.toLowerCase().includes(searchTerm.toLowerCase())
+
+    const filteredGoals = goals.filter((goal) =>
+        goal.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(Expenses);
+        const worksheet = XLSX.utils.json_to_sheet(incomes);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Expenses');
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Incomes');
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
-        saveAs(data, 'Expenses.xlsx');
+        saveAs(data, 'incomes.xlsx');
     };
 
+
     return (
-        <div className="p-4">
+        <div className='p-4'>
             <div className="flex justify-between gap-4 mb-4">
                 <Button className='btn primary-btn !w-auto !min-w-44' onClick={exportToExcel}>Excel İndir</Button>
                 <Input
@@ -90,12 +101,12 @@ const Expenses = () => {
                 />
                 <Button className='btn primary-btn !w-auto !min-w-44' onClick={() => setIsDialogOpen(true)}>Ekle</Button>
             </div>
-
             <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead>Başlık</TableHead>
                         <TableHead>Tutar</TableHead>
+                        <TableHead>Para Birimi</TableHead>
                         <TableHead>Kategori</TableHead>
                         <TableHead>Tarih</TableHead>
                         <TableHead>Açıklama</TableHead>
@@ -103,14 +114,15 @@ const Expenses = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {filteredExpenses.map((expenses) => (
-                        <TableRow key={expenses.id}>
-                            <TableCell>{expenses.title}</TableCell>
-                            <TableCell>{expenses.amount}</TableCell>
-                            <TableCell>{expenses.category}</TableCell>
-                            <TableCell>{expenses.date}</TableCell>
-                            <TableCell>{expenses.description}</TableCell>
-                            <TableCell>{expenses.recurrence}</TableCell>
+                    {filteredGoals.map((goal) => (
+                        <TableRow key={goal.id}>
+                            <TableCell>{goal.title}</TableCell>
+                            <TableCell>{goal.amount}</TableCell>
+                            <TableCell>{goal.currency}</TableCell>
+                            <TableCell>{goal.category}</TableCell>
+                            <TableCell>{goal.date}</TableCell>
+                            <TableCell>{goal.description}</TableCell>
+                            <TableCell>{goal.recurrence}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
@@ -126,35 +138,48 @@ const Expenses = () => {
                     <div className="grid gap-4 py-4">
                         <Input
                             placeholder="Başlık"
-                            value={newExpenses.title}
-                            onChange={(e) => setNewExpenses({ ...newExpenses, title: e.target.value })}
+                            value={newGoal.title}
+                            onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
                         />
                         <Input
                             placeholder="Tutar"
                             type="string"
-                            value={newExpenses.amount}
-                            onChange={(e) => setNewExpenses({ ...newExpenses, amount: parseFloat(e.target.value) })}
+                            value={newGoal.amount}
+                            onChange={(e) => setNewGoal({ ...newGoal, amount: parseFloat(e.target.value) })}
                         />
+                        <Select
+                            value={newGoal.currency}
+                            onValueChange={(value) => setNewGoal({ ...newGoal, currency: value })}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Para Birimi" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="TRY">TRY</SelectItem>
+                                <SelectItem value="EUR">EUR</SelectItem>
+                                <SelectItem value="USD">USD</SelectItem>
+                            </SelectContent>
+                        </Select>
                         <Input
                             placeholder="Kategori"
-                            value={newExpenses.category}
-                            onChange={(e) => setNewExpenses({ ...newExpenses, category: e.target.value })}
+                            value={newGoal.category}
+                            onChange={(e) => setNewGoal({ ...newGoal, category: e.target.value })}
                         />
                         <Input
                             placeholder="Tarih"
                             type="date"
-                            value={newExpenses.date}
-                            onChange={(e) => setNewExpenses({ ...newExpenses, date: e.target.value })}
+                            value={newGoal.date}
+                            onChange={(e) => setNewGoal({ ...newGoal, date: e.target.value })}
                         />
                         <Input
                             placeholder="Açıklama"
-                            value={newExpenses.description}
-                            onChange={(e) => setNewExpenses({ ...newExpenses, description: e.target.value })}
+                            value={newGoal.description}
+                            onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
                         />
 
                         <Select
-                            value={newExpenses.recurrence}
-                            onValueChange={(value) => setNewExpenses({ ...newExpenses, recurrence: value })}
+                            value={newGoal.recurrence}
+                            onValueChange={(value) => setNewGoal({ ...newGoal, recurrence: value })}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Tekrarlama Düzeni" />
@@ -168,12 +193,12 @@ const Expenses = () => {
                     </div>
 
                     <DialogFooter>
-                        <Button className='btn primary-btn' onClick={handleAddExpenses}>Ekle</Button>
+                        <Button className='btn primary-btn' onClick={handleAddGoal}>Ekle</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </div>
-    );
-};
+        </div >
+    )
+}
 
-export default Expenses;
+export default Goals

@@ -47,7 +47,7 @@ const SideBar = (props: Props) => {
                     <Landmark className="text-teal-500" />
                     Giderler
                 </a>
-                <a href="#" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
+                <a href="/goals" className="flex items-center gap-2 px-4 py-1 text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
                     <Goal className="text-purple-500" />
                     Hedefler
                 </a>

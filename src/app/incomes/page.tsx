@@ -26,6 +26,7 @@ type Income = {
     id: number;
     title: string;
     amount: number;
+    currency: string,
     category: string;
     date: string;
     description: string;
@@ -40,6 +41,7 @@ const Incomes = () => {
         id: 0,
         title: '',
         amount: 0,
+        currency: '',
         category: '',
         date: '',
         description: '',
@@ -53,6 +55,7 @@ const Incomes = () => {
             id: 0,
             title: '',
             amount: 0,
+            currency: '',
             category: '',
             date: '',
             description: '',
@@ -96,6 +99,7 @@ const Incomes = () => {
                     <TableRow>
                         <TableHead>Başlık</TableHead>
                         <TableHead>Tutar</TableHead>
+                        <TableHead>Para Birimi</TableHead>
                         <TableHead>Kategori</TableHead>
                         <TableHead>Tarih</TableHead>
                         <TableHead>Açıklama</TableHead>
@@ -107,6 +111,7 @@ const Incomes = () => {
                         <TableRow key={income.id}>
                             <TableCell>{income.title}</TableCell>
                             <TableCell>{income.amount}</TableCell>
+                            <TableCell>{income.currency}</TableCell>
                             <TableCell>{income.category}</TableCell>
                             <TableCell>{income.date}</TableCell>
                             <TableCell>{income.description}</TableCell>
@@ -135,6 +140,19 @@ const Incomes = () => {
                             value={newIncome.amount}
                             onChange={(e) => setNewIncome({ ...newIncome, amount: parseFloat(e.target.value) })}
                         />
+                        <Select
+                            value={newIncome.currency}
+                            onValueChange={(value) => setNewIncome({ ...newIncome, currency: value })}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Para Birimi" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="TRY">TRY</SelectItem>
+                                <SelectItem value="EUR">EUR</SelectItem>
+                                <SelectItem value="USD">USD</SelectItem>
+                            </SelectContent>
+                        </Select>
                         <Input
                             placeholder="Kategori"
                             value={newIncome.category}
