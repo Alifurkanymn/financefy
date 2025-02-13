@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import { Button } from '@/components/ui/button';
@@ -7,74 +7,86 @@ import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-type Expenses = {
-    id: number;
-    title: string;
-    amount: number;
-    category: string;
-    date: string;
-    description: string;
-    recurrence: string;
-};
+import BigTable from '../components/BigTable';
+import { useExpenseStore } from '@/lib/store/useExpensesStore';
 
 const Expenses = () => {
-    const [expenses, setExpenses] = useState < Expenses[] > ([]);
+    const { expenses, addExpense, fetchExpenses, removeExpense, updateExpense, getExpense } = useExpenseStore();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [newExpenses, setNewExpenses] = useState < Expenses > ({
-        id: 0,
+    const [selectedExpense, setSelectedExpense] = useState(null);
+    const tableHeads = [
+        'Başlık', 'Tutar', 'Kategori', 'Tarih', 'Açıklama', 'Tekrarlama Düzeni'
+    ];
+
+    const [newExpense, setNewExpense] = useState({
         title: '',
         amount: 0,
         category: '',
         date: '',
         description: '',
-        recurrence: '',
+        recurrence: 'Günlük',
     });
 
-    const handleAddExpenses = () => {
-        setExpenses([...expenses, { ...newExpenses, id: expenses.length + 1 }]);
+    const handleAddExpense = () => {
+        addExpense(newExpense);
         setIsDialogOpen(false);
-        setNewExpenses({
-            id: 0,
+        setNewExpense({
             title: '',
             amount: 0,
             category: '',
             date: '',
             description: '',
-            recurrence: '',
+            recurrence: 'Günlük',
         });
+    };
+
+    const handleUpdateExpense = () => {
+        if (selectedExpense) {
+            updateExpense(selectedExpense.id, selectedExpense);
+            setIsEditDialogOpen(false);
+            setSelectedExpense(null);
+        }
+    }
+
+    useEffect(() => {
+        fetchExpenses();
+    }, []);
+
+    const openEditDialog = (expense) => {
+        setSelectedExpense(expense);
+        setIsEditDialogOpen(true);
     };
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
 
-    const filteredExpenses = expenses.filter((income) =>
-        income.title.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredExpenses = expenses.filter((expense) =>
+        expense.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(Expenses);
+        const worksheet = XLSX.utils.json_to_sheet(expenses);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Expenses');
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
-        saveAs(data, 'Expenses.xlsx');
+        saveAs(data, 'expenses.xlsx');
     };
 
     return (
@@ -91,84 +103,123 @@ const Expenses = () => {
                 <Button className='btn primary-btn !w-auto !min-w-44' onClick={() => setIsDialogOpen(true)}>Ekle</Button>
             </div>
 
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Başlık</TableHead>
-                        <TableHead>Tutar</TableHead>
-                        <TableHead>Kategori</TableHead>
-                        <TableHead>Tarih</TableHead>
-                        <TableHead>Açıklama</TableHead>
-                        <TableHead>Tekrarlama Düzeni</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {filteredExpenses.map((expenses) => (
-                        <TableRow key={expenses.id}>
-                            <TableCell>{expenses.title}</TableCell>
-                            <TableCell>{expenses.amount}</TableCell>
-                            <TableCell>{expenses.category}</TableCell>
-                            <TableCell>{expenses.date}</TableCell>
-                            <TableCell>{expenses.description}</TableCell>
-                            <TableCell>{expenses.recurrence}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <BigTable
+                data={filteredExpenses}
+                heads={tableHeads}
+                removeFunction={removeExpense}
+                openEditDialog={openEditDialog}
+            />
 
-            {/* Dialog */}
+            {/* Add Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Yeni Gelir Ekle</DialogTitle>
+                        <DialogTitle>Yeni Gider Ekle</DialogTitle>
                     </DialogHeader>
 
                     <div className="grid gap-4 py-4">
                         <Input
                             placeholder="Başlık"
-                            value={newExpenses.title}
-                            onChange={(e) => setNewExpenses({ ...newExpenses, title: e.target.value })}
+                            value={newExpense.title}
+                            onChange={(e) => setNewExpense({ ...newExpense, title: e.target.value })}
                         />
                         <Input
                             placeholder="Tutar"
-                            type="string"
-                            value={newExpenses.amount}
-                            onChange={(e) => setNewExpenses({ ...newExpenses, amount: parseFloat(e.target.value) })}
+                            type="number"
+                            value={newExpense.amount}
+                            onChange={(e) => setNewExpense({ ...newExpense, amount: parseFloat(e.target.value) || 0 })}
                         />
                         <Input
                             placeholder="Kategori"
-                            value={newExpenses.category}
-                            onChange={(e) => setNewExpenses({ ...newExpenses, category: e.target.value })}
+                            value={newExpense.category}
+                            onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
                         />
                         <Input
                             placeholder="Tarih"
                             type="date"
-                            value={newExpenses.date}
-                            onChange={(e) => setNewExpenses({ ...newExpenses, date: e.target.value })}
+                            value={newExpense.date}
+                            onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })}
                         />
                         <Input
                             placeholder="Açıklama"
-                            value={newExpenses.description}
-                            onChange={(e) => setNewExpenses({ ...newExpenses, description: e.target.value })}
+                            value={newExpense.description}
+                            onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })}
                         />
 
                         <Select
-                            value={newExpenses.recurrence}
-                            onValueChange={(value) => setNewExpenses({ ...newExpenses, recurrence: value })}
+                            value={newExpense.recurrence}
+                            onValueChange={(value) => setNewExpense({ ...newExpense, recurrence: value })}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Tekrarlama Düzeni" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="günlük">Günlük</SelectItem>
-                                <SelectItem value="aylık">Aylık</SelectItem>
-                                <SelectItem value="yıllık">Yıllık</SelectItem>
+                                <SelectItem value="Günlük">Günlük</SelectItem>
+                                <SelectItem value="Aylık">Aylık</SelectItem>
+                                <SelectItem value="Yıllık">Yıllık</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
 
                     <DialogFooter>
-                        <Button className='btn primary-btn' onClick={handleAddExpenses}>Ekle</Button>
+                        <Button className='btn primary-btn' onClick={handleAddExpense}>Ekle</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Edit Dialog */}
+            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Gelir Güncelle</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="grid gap-4 py-4">
+                        <Input
+                            placeholder="Başlık"
+                            value={selectedExpense?.title}
+                            onChange={(e) => setSelectedExpense({ ...selectedExpense, title: e.target.value })}
+                        />
+                        <Input
+                            placeholder="Tutar"
+                            type="number"
+                            value={selectedExpense?.amount}
+                            onChange={(e) => setSelectedExpense({ ...selectedExpense, amount: parseFloat(e.target.value) || 0 })}
+                        />
+                        <Input
+                            placeholder="Kategori"
+                            value={selectedExpense?.category}
+                            onChange={(e) => setSelectedExpense({ ...selectedExpense, category: e.target.value })}
+                        />
+                        <Input
+                            placeholder="Tarih"
+                            type="date"
+                            value={selectedExpense?.date}
+                            onChange={(e) => setSelectedExpense({ ...selectedExpense, date: e.target.value })}
+                        />
+                        <Input
+                            placeholder="Açıklama"
+                            value={selectedExpense?.description}
+                            onChange={(e) => setSelectedExpense({ ...selectedExpense, description: e.target.value })}
+                        />
+
+                        <Select
+                            value={selectedExpense?.recurrence}
+                            onValueChange={(value) => setSelectedExpense({ ...selectedExpense, recurrence: value })}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Tekrarlama Düzeni" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="Günlük">Günlük</SelectItem>
+                                <SelectItem value="Aylık">Aylık</SelectItem>
+                                <SelectItem value="Yıllık">Yıllık</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <DialogFooter>
+                        <Button className='btn primary-btn' onClick={handleUpdateExpense}>Güncelle</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

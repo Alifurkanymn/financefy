@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import { useIncomeStore } from "@/lib/store/useIncomeStore";
@@ -24,7 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import BigTable from '../components/BigTable';
 
 const Incomes = () => {
-    const { incomes, addIncome, removeIncome, updateIncome, getIncome } = useIncomeStore();
+    const { incomes, addIncome, fetchIncomes, removeIncome, updateIncome, getIncome } = useIncomeStore();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -64,6 +64,10 @@ const Incomes = () => {
             setSelectedIncome(null);
         }
     }
+
+    useEffect(() => {
+        fetchIncomes();
+    }, []);
 
     const openEditDialog = (income) => {
         setSelectedIncome(income);
@@ -106,7 +110,7 @@ const Incomes = () => {
             <BigTable
                 data={filteredIncomes}
                 heads={tableHeads}
-                removeIncome={removeIncome}
+                removeFunction={removeIncome}
                 openEditDialog={openEditDialog}
             />
 

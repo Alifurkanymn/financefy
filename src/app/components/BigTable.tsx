@@ -9,7 +9,7 @@ type BigTableProps = {
     openEditDialog: (income: any) => void;
 };
 
-const BigTable = ({ data, heads, removeIncome, openEditDialog }: BigTableProps) => {
+const BigTable = ({ data, heads, removeFunction, openEditDialog }: BigTableProps) => {
     return (
         <Table>
             <TableHeader>
@@ -31,7 +31,7 @@ const BigTable = ({ data, heads, removeIncome, openEditDialog }: BigTableProps) 
                         <TableCell>{income.description}</TableCell>
                         <TableCell>{income.recurrence}</TableCell>
                         <TableCell>
-                            <Button className="text-red-500" onClick={() => removeIncome(income.id)}>
+                            <Button className="text-red-500" onClick={() => removeFunction(income.id)}>
                                 Sil
                             </Button>
                             <Button className="text-red-500" onClick={() => openEditDialog(income)}>
