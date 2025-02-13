@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useAuthStore } from "@/lib/store/authStore";
 import SideBar from "./components/SideBar";
 import { auth } from "@/lib/services/firebase";
+import Loading from "./components/Loading";
 
 const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
     const { user, loading, setUser } = useAuthStore();
@@ -16,7 +17,7 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
         return () => unsubscribe();
     }, [setUser]);
 
-    if (loading) return <p>Yükleniyor...</p>;
+    if (loading) return <Loading />;
 
     return (
         <div className="flex h-screen">
