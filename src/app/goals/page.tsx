@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import { Button } from '@/components/ui/button';
@@ -7,65 +7,58 @@ import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+    TableHead,
+    TableCell,
+} from "@/components/ui/table";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useGoalStore } from '@/lib/store/useGoalStore';
 
-type Goals = {
-    id: number;
-    title: string;
-    targetAmount: number;
-    currency: string,
-    startDate: string,
-    endDate: string,
-    currentSaving: number,
-    category: string;
-    description: string;
-    status: string;
-};
-
-const Goals = (props: Props) => {
-    const [goals, setGoals] = useState < Goals[] > ([]);
+const Goals = () => {
+    const { goals, addGoal, removeGoal, updateGoal, fetchGoals } = useGoalStore();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [newGoal, setNewGoal] = useState < Goals > ({
-        id: 0,
+    const [selectedGoal, setSelectedGoal] = useState(null);
+
+    const [newGoal, setNewGoal] = useState({
         title: '',
         targetAmount: 0,
-        currency: '',
+        currency: 'TRY',
         startDate: '',
         endDate: '',
         currentSaving: 0,
         category: '',
         description: '',
-        status: '',
-    })
+        status: 'Active',
+        recurrence: 'Günlük',
+    });
+
+    useEffect(() => {
+        fetchGoals(); // Fetch goals on mount
+    }, []);
 
     const handleAddGoal = () => {
-        setGoals([...goals, { ...newGoal, id: goals.length + 1 }]);
+        addGoal({ ...newGoal });
         setIsDialogOpen(false);
         setNewGoal({
-            id: 0,
             title: '',
             targetAmount: 0,
-            currency: '',
+            currency: 'TRY',
             startDate: '',
             endDate: '',
             currentSaving: 0,
             category: '',
             description: '',
-            status: '',
+            status: 'Active',
+            recurrence: 'Günlük',
         });
     };
 
@@ -73,20 +66,18 @@ const Goals = (props: Props) => {
         setSearchTerm(event.target.value);
     };
 
-
     const filteredGoals = goals.filter((goal) =>
         goal.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(incomes);
+        const worksheet = XLSX.utils.json_to_sheet(goals);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Incomes');
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Goals');
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
-        saveAs(data, 'incomes.xlsx');
+        saveAs(data, 'goals.xlsx');
     };
-
 
     return (
         <div className='p-4'>
@@ -101,6 +92,7 @@ const Goals = (props: Props) => {
                 />
                 <Button className='btn primary-btn !w-auto !min-w-44' onClick={() => setIsDialogOpen(true)}>Ekle</Button>
             </div>
+
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -108,8 +100,8 @@ const Goals = (props: Props) => {
                         <TableHead>Tutar</TableHead>
                         <TableHead>Para Birimi</TableHead>
                         <TableHead>Kategori</TableHead>
-                        <TableHead>Tarih</TableHead>
-                        <TableHead>Açıklama</TableHead>
+                        <TableHead>Başlangıç Tarihi</TableHead>
+                        <TableHead>Durum</TableHead>
                         <TableHead>Tekrarlama Düzeni</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -117,11 +109,11 @@ const Goals = (props: Props) => {
                     {filteredGoals.map((goal) => (
                         <TableRow key={goal.id}>
                             <TableCell>{goal.title}</TableCell>
-                            <TableCell>{goal.amount}</TableCell>
+                            <TableCell>{goal.targetAmount}</TableCell>
                             <TableCell>{goal.currency}</TableCell>
                             <TableCell>{goal.category}</TableCell>
-                            <TableCell>{goal.date}</TableCell>
-                            <TableCell>{goal.description}</TableCell>
+                            <TableCell>{goal.startDate}</TableCell>
+                            <TableCell>{goal.status}</TableCell>
                             <TableCell>{goal.recurrence}</TableCell>
                         </TableRow>
                     ))}
@@ -132,7 +124,7 @@ const Goals = (props: Props) => {
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Yeni Gelir Ekle</DialogTitle>
+                        <DialogTitle>Yeni Hedef Ekle</DialogTitle>
                     </DialogHeader>
 
                     <div className="grid gap-4 py-4">
@@ -142,10 +134,10 @@ const Goals = (props: Props) => {
                             onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
                         />
                         <Input
-                            placeholder="Tutar"
-                            type="string"
-                            value={newGoal.amount}
-                            onChange={(e) => setNewGoal({ ...newGoal, amount: parseFloat(e.target.value) })}
+                            placeholder="Hedef Tutarı"
+                            type="number"
+                            value={newGoal.targetAmount}
+                            onChange={(e) => setNewGoal({ ...newGoal, targetAmount: parseFloat(e.target.value) })}
                         />
                         <Select
                             value={newGoal.currency}
@@ -166,17 +158,16 @@ const Goals = (props: Props) => {
                             onChange={(e) => setNewGoal({ ...newGoal, category: e.target.value })}
                         />
                         <Input
-                            placeholder="Tarih"
+                            placeholder="Başlangıç Tarihi"
                             type="date"
-                            value={newGoal.date}
-                            onChange={(e) => setNewGoal({ ...newGoal, date: e.target.value })}
+                            value={newGoal.startDate}
+                            onChange={(e) => setNewGoal({ ...newGoal, startDate: e.target.value })}
                         />
                         <Input
                             placeholder="Açıklama"
                             value={newGoal.description}
                             onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
                         />
-
                         <Select
                             value={newGoal.recurrence}
                             onValueChange={(value) => setNewGoal({ ...newGoal, recurrence: value })}
@@ -185,9 +176,9 @@ const Goals = (props: Props) => {
                                 <SelectValue placeholder="Tekrarlama Düzeni" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="günlük">Günlük</SelectItem>
-                                <SelectItem value="aylık">Aylık</SelectItem>
-                                <SelectItem value="yıllık">Yıllık</SelectItem>
+                                <SelectItem value="Günlük">Günlük</SelectItem>
+                                <SelectItem value="Aylık">Aylık</SelectItem>
+                                <SelectItem value="Yıllık">Yıllık</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -197,8 +188,8 @@ const Goals = (props: Props) => {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </div >
-    )
-}
+        </div>
+    );
+};
 
-export default Goals
+export default Goals;

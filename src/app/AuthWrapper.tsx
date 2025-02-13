@@ -18,8 +18,6 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
 
     if (loading) return <p>Yükleniyor...</p>;
 
-    console.log(auth)
-
     return (
         <div className="flex h-screen">
             <div className="flex p-4 gap-4 h-screen overflow-hidden w-full">
