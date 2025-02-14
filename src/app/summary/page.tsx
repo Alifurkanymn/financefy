@@ -48,7 +48,7 @@ const Summary = (props: Props) => {
     return (
         <div>
             <h1 className="text-2xl text-black font-bold mb-3">Özetler</h1>
-            <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 w-full gap-4">
                 {["Gelirlerim", "Giderlerim", "Hedeflerim"].map((title, index) => (
                     <Card key={index} className="h-full w-full relative">
                         <CardHeader>

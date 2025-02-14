@@ -3,13 +3,13 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { Firestore, getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCkpeO9Prow406ETbhP7Ncb0pl6raRSEaw",
-  authDomain: "financefy-f9bd4.firebaseapp.com",
-  projectId: "financefy-f9bd4",
-  storageBucket: "financefy-f9bd4.firebasestorage.app",
-  messagingSenderId: "920336670853",
-  appId: "1:920336670853:web:eff69bb8915a3d4dd689ec",
-  measurementId: "G-6SWQ351X0K"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID!
 };
 
 const app: FirebaseApp = initializeApp(firebaseConfig);

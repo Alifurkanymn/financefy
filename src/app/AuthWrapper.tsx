@@ -29,7 +29,7 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <div className="flex h-screen">
-            <div className={`flex ${user ? "p-4" : ""} gap-4 h-screen overflow-hidden w-full`}>
+            <div className={`flex flex-col lg:flex-row  ${user ? "p-4" : ""} gap-4 h-screen overflow-hidden w-full`}>
                 {user && <SideBar />}
                 <main className={`bg-white w-full rounded-lg shadow-xl overflow-y-auto ${user ? "p-6" : ""}`}>
                     {children}

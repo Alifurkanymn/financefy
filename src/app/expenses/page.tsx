@@ -46,10 +46,13 @@ const Expenses = () => {
 
     return (
         <div className="p-4">
-            <div className="flex justify-between gap-4 mb-4">
-                {filteredExpenses.length !== 0 && (
-                    <Button className='btn primary-btn !w-auto !min-w-44' onClick={exportToExcel}>Excel İndir</Button>
-                )}
+            <div className="flex flex-col lg:flex-row justify-between gap-4 mb-4">
+                <div className='flex items-center justify-between'>
+                    {filteredExpenses.length !== 0 && (
+                        <Button className='btn primary-btn !w-auto lg:!min-w-44' onClick={exportToExcel}>Excel İndir</Button>
+                    )}
+                    <Button className='btn primary-btn !w-auto block lg:hidden' onClick={() => setIsDialogOpen(true)}>Ekle</Button>
+                </div>
                 <Input
                     type="text"
                     placeholder="Ara..."
@@ -57,7 +60,7 @@ const Expenses = () => {
                     value={searchTerm}
                     onChange={handleSearch}
                 />
-                <Button className='btn primary-btn !w-auto !min-w-44' onClick={() => setIsDialogOpen(true)}>Ekle</Button>
+                <Button className='btn primary-btn !w-auto !min-w-44 hidden lg:block' onClick={() => setIsDialogOpen(true)}>Ekle</Button>
             </div>
 
             {filteredExpenses.length === 0 ? (
