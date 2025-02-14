@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 type BigTableProps = {
     data: unknown[];
     heads: string[];
-    removeIncome: (id: string) => void;
+    removeFunction: (id: string) => void;
     openEditDialog: (income: unknown) => void;
 };
 
