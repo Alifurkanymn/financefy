@@ -3,19 +3,40 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Income } from '@/app/types/types';
 
-const EditIncomeDialog = ({ isOpen, onClose, income, updateIncome }) => {
-    const [editedIncome, setEditedIncome] = useState(income);
+interface EditIncomeDialogProps {
+    isOpen: boolean;
+    onClose: () => void;
+    income: Income | null;
+    updateIncome: (id: string, updatedIncome: Income) => void;
+}
+
+const EditIncomeDialog = ({ isOpen, onClose, income, updateIncome }: EditIncomeDialogProps) => {
+    const [editedIncome, setEditedIncome] = useState < Income > ({
+        id: "",
+        title: '',
+        amount: 0,
+        currency: 'TRY',
+        category: '',
+        date: '',
+        description: '',
+        recurrence: 'Günlük',
+    });
 
     useEffect(() => {
-        setEditedIncome(income);
+        if (income) {
+            setEditedIncome(income);
+        }
     }, [income]);
 
     const handleUpdateIncome = () => {
-        if (editedIncome) {
-            updateIncome(editedIncome.id, editedIncome);
-            onClose();
+        if (!editedIncome.title || editedIncome.amount <= 0 || !editedIncome.category || !editedIncome.date) {
+            alert("Lütfen tüm alanları doldurun!");
+            return;
         }
+        updateIncome(editedIncome.id, editedIncome);
+        onClose();
     };
 
     return (
@@ -28,17 +49,17 @@ const EditIncomeDialog = ({ isOpen, onClose, income, updateIncome }) => {
                 <div className="grid gap-4 py-4">
                     <Input
                         placeholder="Başlık"
-                        value={editedIncome?.title}
+                        value={editedIncome.title}
                         onChange={(e) => setEditedIncome({ ...editedIncome, title: e.target.value })}
                     />
                     <Input
                         placeholder="Tutar"
                         type="number"
-                        value={editedIncome?.amount}
+                        value={editedIncome.amount}
                         onChange={(e) => setEditedIncome({ ...editedIncome, amount: parseFloat(e.target.value) || 0 })}
                     />
                     <Select
-                        value={editedIncome?.currency}
+                        value={editedIncome.currency}
                         onValueChange={(value) => setEditedIncome({ ...editedIncome, currency: value })}
                     >
                         <SelectTrigger>
@@ -50,22 +71,22 @@ const EditIncomeDialog = ({ isOpen, onClose, income, updateIncome }) => {
                     </Select>
                     <Input
                         placeholder="Kategori"
-                        value={editedIncome?.category}
+                        value={editedIncome.category}
                         onChange={(e) => setEditedIncome({ ...editedIncome, category: e.target.value })}
                     />
                     <Input
                         placeholder="Tarih"
                         type="date"
-                        value={editedIncome?.date}
+                        value={editedIncome.date}
                         onChange={(e) => setEditedIncome({ ...editedIncome, date: e.target.value })}
                     />
                     <Input
                         placeholder="Açıklama"
-                        value={editedIncome?.description}
+                        value={editedIncome.description}
                         onChange={(e) => setEditedIncome({ ...editedIncome, description: e.target.value })}
                     />
                     <Select
-                        value={editedIncome?.recurrence}
+                        value={editedIncome.recurrence}
                         onValueChange={(value) => setEditedIncome({ ...editedIncome, recurrence: value })}
                     >
                         <SelectTrigger>

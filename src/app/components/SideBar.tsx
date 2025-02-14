@@ -37,7 +37,7 @@ const SideBar = () => {
                         </Button>
                     </SheetTrigger>
 
-                    <SheetContent position="left" size="content">
+                    <SheetContent>
                         <nav className="flex flex-col gap-2 mt-4">
                             <Link href='/' className="flex items-center gap-2 text-2xl font-bold text-center mb-10">
                                 <Image className='rounded-2xl hover:scale-105 transition-all duration-300' src="/logo-bg.svg" alt='logo-bg' width={60} height={60} />

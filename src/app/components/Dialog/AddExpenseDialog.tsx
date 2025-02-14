@@ -4,9 +4,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { NumericFormat } from 'react-number-format';
+import { toast } from "@/hooks/use-toast";
+import { Expense } from "@/app/types/types";
 
-const AddExpenseDialog = ({ isOpen, onClose, addExpense }) => {
-    const [newExpense, setNewExpense] = useState({
+interface AddExpenseDialogProps {
+    isOpen: boolean;
+    onClose: () => void;
+    addExpense: (expense: Expense) => void;
+}
+
+const AddExpenseDialog = ({ isOpen, onClose, addExpense }: AddExpenseDialogProps) => {
+    const [newExpense, setNewExpense] = useState < Expense > ({
+        id: '',
         title: '',
         amount: 0,
         currency: 'TRY',
@@ -24,6 +33,7 @@ const AddExpenseDialog = ({ isOpen, onClose, addExpense }) => {
         addExpense(newExpense);
         onClose();
         setNewExpense({
+            id: '',
             title: '',
             amount: 0,
             currency: 'TRY',

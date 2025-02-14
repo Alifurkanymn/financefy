@@ -4,9 +4,19 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { NumericFormat } from 'react-number-format';
+import { toast } from '@/hooks/use-toast';
+import { Income } from '@/app/types/types';
 
-const AddIncomeDialog = ({ isOpen, onClose, addIncome }) => {
-    const [newIncome, setNewIncome] = useState({
+interface AddIncomeDialogProps {
+    isOpen: boolean;
+    onClose: () => void;
+    addIncome: (income: Income) => void;
+}
+
+
+const AddIncomeDialog = ({ isOpen, onClose, addIncome }: AddIncomeDialogProps) => {
+    const [newIncome, setNewIncome] = useState < Income > ({
+        id: '',
         title: '',
         amount: 0,
         currency: 'TRY',
@@ -17,9 +27,14 @@ const AddIncomeDialog = ({ isOpen, onClose, addIncome }) => {
     });
 
     const handleAddIncome = () => {
+        if (!newIncome.title || newIncome.amount <= 0 || !newIncome.category || !newIncome.date) {
+            toast({ description: 'Lütfen değerleri kontrol ediniz!' });
+            return;
+        }
         addIncome(newIncome);
         onClose();
         setNewIncome({
+            id: '',
             title: '',
             amount: 0,
             currency: 'TRY',

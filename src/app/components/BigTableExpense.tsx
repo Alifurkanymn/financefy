@@ -1,15 +1,16 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Expense } from '@/app/types/types';
 
-type BigTableProps = {
-    data: unknown[];
+type BigTableExpenseProps = {
+    data: Expense[];
     heads: string[];
     removeFunction: (id: string) => void;
-    openEditDialog: (income: unknown) => void;
+    openEditDialog: (expense: Expense) => void;
 };
 
-const BigTable = ({ data, heads, removeFunction, openEditDialog }: BigTableProps) => {
+const BigTableExpense = ({ data, heads, removeFunction, openEditDialog }: BigTableExpenseProps) => {
     const formatAmount = (amount: number) => {
         return new Intl.NumberFormat('tr-TR', {
             style: 'currency',
@@ -26,6 +27,7 @@ const BigTable = ({ data, heads, removeFunction, openEditDialog }: BigTableProps
             day: '2-digit'
         }).format(parsedDate).replace(/\./g, '.');
     };
+
     return (
         <Table>
             <TableHeader>
@@ -37,21 +39,21 @@ const BigTable = ({ data, heads, removeFunction, openEditDialog }: BigTableProps
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data?.map((element) => (
-                    <TableRow key={element.id}>
-                        <TableCell>{element.title}</TableCell>
-                        <TableCell>{formatAmount(element.amount)}</TableCell>
-                        <TableCell>{element.currency}</TableCell>
-                        <TableCell>{element.category}</TableCell>
-                        <TableCell>{formatDate(element.date)}</TableCell>
-                        <TableCell>{element.description}</TableCell>
-                        <TableCell>{element.recurrence}</TableCell>
+                {data?.map((transaction) => (
+                    <TableRow key={transaction.id}>
+                        <TableCell>{transaction.title}</TableCell>
+                        <TableCell>{formatAmount(transaction.amount)}</TableCell>
+                        <TableCell>{transaction.currency}</TableCell>
+                        <TableCell>{transaction.category}</TableCell>
+                        <TableCell>{formatDate(transaction.date)}</TableCell>
+                        <TableCell>{transaction.description}</TableCell>
+                        <TableCell>{transaction.recurrence}</TableCell>
                         <TableCell>
-                            <div className='w-full flex items-center gap-4'>
-                                <Button className="btn primary-btn !min-w-20 !w-auto text-white" onClick={() => removeFunction(element.id)}>
+                            <div className="w-full flex items-center gap-4">
+                                <Button className="btn primary-btn !min-w-20 !w-auto text-white" onClick={() => removeFunction(transaction.id)}>
                                     Sil
                                 </Button>
-                                <Button className="btn !w-auto secondary-btn text-primaryColor" onClick={() => openEditDialog(element)}>
+                                <Button className="btn !w-auto secondary-btn text-primaryColor" onClick={() => openEditDialog(transaction)}>
                                     Düzenle
                                 </Button>
                             </div>
@@ -63,4 +65,4 @@ const BigTable = ({ data, heads, removeFunction, openEditDialog }: BigTableProps
     );
 };
 
-export default BigTable;
+export default BigTableExpense;

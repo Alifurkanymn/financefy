@@ -3,17 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { useIncomeStore } from "@/lib/store/useIncomeStore";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import BigTable from '../components/BigTable';
 import AddIncomeDialog from '../components/Dialog/AddIncomeDialog';
 import EditIncomeDialog from '../components/Dialog/EditIncomeDialog';
 import { EqualApproximately } from 'lucide-react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import BigTableIncome from '../components/BigTableIncome';
+import { Income } from '@/app/types/types';
 
 const Incomes = () => {
     const { incomes, addIncome, fetchIncomes, removeIncome, updateIncome } = useIncomeStore();
     const [searchTerm, setSearchTerm] = useState('');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-    const [selectedIncome, setSelectedIncome] = useState(null);
+    const [selectedIncome, setSelectedIncome] = useState < Income | null > (null);
 
     const tableHeads = [
         'Başlık', 'Tutar', 'Para Birimi', 'Kategori', 'Tarih', 'Açıklama', 'Tekrarlama Düzeni'
@@ -31,7 +34,7 @@ const Incomes = () => {
         fetchIncomes();
     }, [fetchIncomes]);
 
-    const openEditDialog = (income) => {
+    const openEditDialog = (income: Income) => {
         setSelectedIncome(income);
         setIsEditDialogOpen(true);
     };
@@ -72,7 +75,7 @@ const Incomes = () => {
                     <p className="text-2xl mt-2 text-primaryColor">Henüz bir geliriniz yok !</p>
                 </div>
             ) : (
-                <BigTable
+                <BigTableIncome
                     data={filteredIncomes}
                     heads={tableHeads}
                     removeFunction={removeIncome}

@@ -5,10 +5,20 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
 import { NumericFormat } from 'react-number-format';
+import { Expense } from "@/app/types/types";
 
-const EditExpenseDialog = ({ isOpen, onClose, selectedExpense, updateExpense }) => {
+
+interface EditExpenseDialogProps {
+    isOpen: boolean;
+    onClose: () => void;
+    selectedExpense: Expense | null;
+    updateExpense: (id: string, updatedExpense: Expense) => void;
+}
+
+const EditExpenseDialog = ({ isOpen, onClose, selectedExpense, updateExpense }: EditExpenseDialogProps) => {
     const { toast } = useToast();
-    const [expense, setExpense] = useState({
+    const [expense, setExpense] = useState < Expense > ({
+        id: "",
         title: '',
         amount: 0,
         currency: 'TRY',
@@ -27,6 +37,7 @@ const EditExpenseDialog = ({ isOpen, onClose, selectedExpense, updateExpense }) 
     const handleUpdateExpense = () => {
         if (!expense.title || expense.amount <= 0 || !expense.category || !expense.date) {
             toast({ description: 'Lütfen değerleri kontrol ediniz!' });
+            return;
         }
         updateExpense(expense.id, expense);
         onClose();

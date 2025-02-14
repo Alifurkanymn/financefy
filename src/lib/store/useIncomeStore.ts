@@ -5,7 +5,7 @@ import { getAuth } from "firebase/auth";
 import { toast } from "@/hooks/use-toast";
 
 type Income = {
-  id?: string;
+  id: string;
   title: string;
   amount: number;
   currency: string;

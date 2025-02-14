@@ -5,7 +5,7 @@ import { getAuth } from "firebase/auth";
 import { toast } from "@/hooks/use-toast";
 
 type Goal = {
-  id?: string;
+  id: string;
   title: string;
   targetAmount: number;
   currency: string;

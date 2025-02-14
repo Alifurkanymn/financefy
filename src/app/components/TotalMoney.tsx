@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Wallet } from "lucide-react";
 
+interface TotalMoneyProps {
+    netTotal: number;
+}
 
-const TotalMoney = ({ netTotal }) => {
+const TotalMoney = ({ netTotal }: TotalMoneyProps) => {
     return (
         <div className="total w-full flex flex-col items-end">
             <Card className="bg-green-600 w-max">
@@ -15,7 +18,7 @@ const TotalMoney = ({ netTotal }) => {
                 </CardHeader>
             </Card>
         </div>
-    )
-}
+    );
+};
 
-export default TotalMoney
+export default TotalMoney;

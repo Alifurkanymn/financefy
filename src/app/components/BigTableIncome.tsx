@@ -1,24 +1,16 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Income } from '@/app/types/types';
 
-interface Transaction {
-    id: string;
-    title: string;
-    targetAmount: number;
-    currency: string;
-    category: string;
-    startDate: string;
-    status?: string;
-}
-
-type BigTableGoalsProps = {
-    data: Transaction[];
+type BigTableIncomeProps = {
+    data: Income[];
     heads: string[];
-    removeGoal: (id: string) => void;
+    removeFunction: (id: string) => void;
+    openEditDialog: (income: Income) => void;
 };
 
-const BigTableGoals = ({ data, heads, removeGoal }: BigTableGoalsProps) => {
+const BigTableIncome = ({ data, heads, removeFunction, openEditDialog }: BigTableIncomeProps) => {
     const formatAmount = (amount: number) => {
         return new Intl.NumberFormat('tr-TR', {
             style: 'currency',
@@ -27,7 +19,6 @@ const BigTableGoals = ({ data, heads, removeGoal }: BigTableGoalsProps) => {
             maximumFractionDigits: 2
         }).format(amount);
     };
-
     const formatDate = (date: string) => {
         const parsedDate = new Date(date);
         return new Intl.DateTimeFormat('tr-TR', {
@@ -44,25 +35,26 @@ const BigTableGoals = ({ data, heads, removeGoal }: BigTableGoalsProps) => {
                     {heads.map((head, index) => (
                         <TableHead key={index}>{head}</TableHead>
                     ))}
-                    {data.length !== 0 && <TableHead>Düzenle</TableHead>}
+                    {data?.length !== 0 && <TableHead>Düzenle</TableHead>}
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data.map((goal) => (
-                    <TableRow key={goal.id}>
-                        <TableCell>{goal.title}</TableCell>
-                        <TableCell>{formatAmount(goal.targetAmount)}</TableCell>
-                        <TableCell>{goal.currency}</TableCell>
-                        <TableCell>{goal.category}</TableCell>
-                        <TableCell>{formatDate(goal.startDate)}</TableCell>
-                        <TableCell>{goal.status ?? '-'}</TableCell>
+                {data?.map((transaction) => (
+                    <TableRow key={transaction.id}>
+                        <TableCell>{transaction.title}</TableCell>
+                        <TableCell>{formatAmount(transaction.amount)}</TableCell>
+                        <TableCell>{transaction.currency}</TableCell>
+                        <TableCell>{transaction.category}</TableCell>
+                        <TableCell>{formatDate(transaction.date)}</TableCell>
+                        <TableCell>{transaction.description}</TableCell>
+                        <TableCell>{transaction.recurrence}</TableCell>
                         <TableCell>
                             <div className="w-full flex items-center gap-4">
-                                <Button
-                                    className="btn primary-btn !min-w-20 !w-auto text-white"
-                                    onClick={() => removeGoal(goal.id)}
-                                >
+                                <Button className="btn primary-btn !min-w-20 !w-auto text-white" onClick={() => removeFunction(transaction.id)}>
                                     Sil
+                                </Button>
+                                <Button className="btn !w-auto secondary-btn text-primaryColor" onClick={() => openEditDialog(transaction)}>
+                                    Düzenle
                                 </Button>
                             </div>
                         </TableCell>
@@ -73,4 +65,4 @@ const BigTableGoals = ({ data, heads, removeGoal }: BigTableGoalsProps) => {
     );
 };
 
-export default BigTableGoals;
+export default BigTableIncome;

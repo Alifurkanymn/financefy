@@ -4,15 +4,18 @@ import { useState, useEffect } from 'react';
 import { useExpenseStore } from '@/lib/store/useExpensesStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import BigTable from '../components/BigTable';
 import AddExpenseDialog from '../components/Dialog/AddExpenseDialog';
 import EditExpenseDialog from '../components/Dialog/EditExpenseDialog';
 import { EqualApproximately } from 'lucide-react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import BigTableExpense from '../components/BigTableExpense';
+import { Expense } from '@/app/types/types';
 
 const Expenses = () => {
     const { expenses, addExpense, fetchExpenses, removeExpense, updateExpense } = useExpenseStore();
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedExpense, setSelectedExpense] = useState(null);
+    const [selectedExpense, setSelectedExpense] = useState < Expense | null > (null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const tableHeads = [
@@ -22,7 +25,7 @@ const Expenses = () => {
         fetchExpenses();
     }, [fetchExpenses]);
 
-    const handleSearch = (event) => {
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
 
@@ -30,7 +33,7 @@ const Expenses = () => {
         expense.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const openEditDialog = (expense) => {
+    const openEditDialog = (expense: Expense) => {
         setSelectedExpense(expense);
         setIsEditDialogOpen(true);
     };
@@ -70,7 +73,7 @@ const Expenses = () => {
                     <p className="text-2xl mt-2 text-primaryColor">Henüz bir gideriniz yok !</p>
                 </div>
             ) : (
-                <BigTable
+                <BigTableExpense
                     data={filteredExpenses}
                     heads={tableHeads}
                     removeFunction={removeExpense}

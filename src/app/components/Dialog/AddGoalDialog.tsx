@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useGoalStore } from '@/lib/store/useGoalStore';
 import { NumericFormat } from 'react-number-format';
+import { Goal } from '@/app/types/types';
 
 type AddGoalDialogProps = {
     isOpen: boolean;
@@ -14,7 +15,8 @@ type AddGoalDialogProps = {
 
 const AddGoalDialog = ({ isOpen, setIsOpen }: AddGoalDialogProps) => {
     const { addGoal } = useGoalStore();
-    const [newGoal, setNewGoal] = useState({
+    const [newGoal, setNewGoal] = useState < Goal > ({
+        id: '',
         title: '',
         targetAmount: 0,
         currency: 'TRY',
@@ -29,6 +31,7 @@ const AddGoalDialog = ({ isOpen, setIsOpen }: AddGoalDialogProps) => {
         addGoal({ ...newGoal });
         setIsOpen(false);
         setNewGoal({
+            id: '',
             title: '',
             targetAmount: 0,
             currency: 'TRY',
