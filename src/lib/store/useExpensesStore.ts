@@ -2,11 +2,13 @@ import { create } from "zustand";
 import { collection, addDoc, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import { getAuth } from "firebase/auth";
+import { toast } from "@/hooks/use-toast";
 
 type Expense = {
   id?: string;
   title: string;
   amount: number;
+  currency: string;
   category: string;
   date: string;
   description: string;
@@ -49,6 +51,7 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
       set((state) => ({
         expenses: [...state.expenses, { ...expense, id: docRef.id }],
       }));
+      toast({ description: 'Gideriniz başarıyla eklendi !' });
     }
   },
 
@@ -61,13 +64,13 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
       set((state) => ({
         expenses: state.expenses.filter((expense) => expense.id !== id),
       }));
+      toast({ description: 'Gideriniz silindi !' });
     }
   },
 
   updateExpense: async (id, updatedExpense) => {
     const auth = getAuth();
     const userId = auth.currentUser?.uid;
-
     if (userId) {
       const expenseRef = doc(db, "users", userId, "expenses", id);
       await updateDoc(expenseRef, updatedExpense);
@@ -76,6 +79,7 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
           expense.id === id ? { ...expense, ...updatedExpense } : expense
         ),
       }));
+      toast({ description: 'Gideriniz başarıyla güncellendi !' });
     }
   },
 

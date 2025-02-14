@@ -2,14 +2,14 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-type BigTableProps = {
+type BigTableGoalsProps = {
     data: any[];
     heads: string[];
-    removeIncome: (id: string) => void;
-    openEditDialog: (income: any) => void;
+    removeGoal: (id: string) => void;
+    openEditDialog: (goal: any) => void;
 };
 
-const BigTable = ({ data, heads, removeFunction, openEditDialog }: BigTableProps) => {
+const BigTableGoals = ({ data, heads, removeGoal, openEditDialog }: BigTableGoalsProps) => {
     const formatAmount = (amount: number) => {
         return new Intl.NumberFormat('tr-TR', {
             style: 'currency',
@@ -24,8 +24,9 @@ const BigTable = ({ data, heads, removeFunction, openEditDialog }: BigTableProps
             year: 'numeric',
             month: '2-digit',
             day: '2-digit'
-        }).format(parsedDate).replace(/\./g, '.'); // "yyyy.mm.dd" formatına uygun
+        }).format(parsedDate).replace(/\./g, '.');
     };
+
     return (
         <Table>
             <TableHeader>
@@ -37,22 +38,21 @@ const BigTable = ({ data, heads, removeFunction, openEditDialog }: BigTableProps
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data?.map((element) => (
-                    <TableRow key={element.id}>
-                        <TableCell>{element.title}</TableCell>
-                        <TableCell>{formatAmount(element.amount)}</TableCell>
-                        <TableCell>{element.currency}</TableCell>
-                        <TableCell>{element.category}</TableCell>
-                        <TableCell>{formatDate(element.date)}</TableCell>
-                        <TableCell>{element.description}</TableCell>
-                        <TableCell>{element.recurrence}</TableCell>
+                {data?.map((goal) => (
+                    <TableRow key={goal.id}>
+                        <TableCell>{goal.title}</TableCell>
+                        <TableCell>{formatAmount(goal.targetAmount)}</TableCell>
+                        <TableCell>{goal.currency}</TableCell>
+                        <TableCell>{goal.category}</TableCell>
+                        <TableCell>{formatDate(goal.startDate)}</TableCell>
+                        <TableCell>{goal.status}</TableCell>
                         <TableCell>
-                            <div className='w-full flex items-center gap-4'>
-                                <Button className="btn primary-btn !min-w-20 !w-auto text-white" onClick={() => removeFunction(element.id)}>
+                            <div className="w-full flex items-center gap-4">
+                                <Button
+                                    className="btn primary-btn !min-w-20 !w-auto text-white"
+                                    onClick={() => removeGoal(goal.id)}
+                                >
                                     Sil
-                                </Button>
-                                <Button className="btn !w-auto secondary-btn text-primaryColor" onClick={() => openEditDialog(element)}>
-                                    Düzenle
                                 </Button>
                             </div>
                         </TableCell>
@@ -63,4 +63,4 @@ const BigTable = ({ data, heads, removeFunction, openEditDialog }: BigTableProps
     );
 };
 
-export default BigTable;
+export default BigTableGoals;

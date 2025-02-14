@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { collection, addDoc, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import { getAuth } from "firebase/auth";
+import { toast } from "@/hooks/use-toast";
 
 type Goal = {
   id?: string;
@@ -9,12 +10,10 @@ type Goal = {
   targetAmount: number;
   currency: string;
   startDate: string;
-  endDate: string;
   currentSaving: number;
   category: string;
   description: string;
   status: string;
-  recurrence: string;
 };
 
 type GoalState = {
@@ -54,6 +53,7 @@ export const useGoalStore = create<GoalState>((set, get) => ({
         goals: [...state.goals, { ...goal, id: docRef.id }],
       }));
     }
+      toast({ description: 'Hedefiniz başarıyla eklendi !' });
   },
 
   removeGoal: async (id) => {
@@ -66,6 +66,7 @@ export const useGoalStore = create<GoalState>((set, get) => ({
         goals: state.goals.filter((goal) => goal.id !== id),
       }));
     }
+      toast({ description: 'Hedefiniz başarıyla silindi !' });
   },
 
   updateGoal: async (id, updatedGoal) => {
@@ -80,6 +81,7 @@ export const useGoalStore = create<GoalState>((set, get) => ({
           goal.id === id ? { ...goal, ...updatedGoal } : goal
         ),
       }));
+      toast({ description: 'Hedefiniz başarıyla güncellendi !' });
     }
   },
 

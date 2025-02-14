@@ -23,7 +23,7 @@ export default function RootLayoutClient({ children }: { children: ReactNode }) 
     }
 
     return (
-        <div className="flex p-4 gap-4 h-screen overflow-hidden">
+        <div className="flex flex-col lg:flex-row p-4 gap-4 h-screen overflow-hidden">
             {user && <SideBar />}
             <div className="bg-white w-full rounded-lg shadow-xl overflow-y-auto p-6">
                 {children}

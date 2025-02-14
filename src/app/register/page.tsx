@@ -76,14 +76,6 @@ const Register = (props: Props) => {
                         <Button className="btn primary-btn" onClick={handleRegister}>
                             Kayıt Ol
                         </Button>
-                        <div className="relative flex items-center w-full py-8">
-                            <div className="flex-grow h-px bg-zinc-700"></div>
-                            <span className="absolute left-1/2 -translate-x-1/2 bg-white px-2 text-zinc-700">YA DA</span>
-                            <div className="flex-grow h-px bg-zinc-700"></div>
-                        </div>
-                        <Button className="btn secondary-btn">
-                            <FaGoogle /> Google ile Giriş Yap
-                        </Button>
                     </CardFooter>
                 </Card>
             </div>

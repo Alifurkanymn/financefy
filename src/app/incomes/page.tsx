@@ -1,69 +1,32 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
 import { useIncomeStore } from "@/lib/store/useIncomeStore";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import BigTable from '../components/BigTable';
+import AddIncomeDialog from '../components/Dialog/AddIncomeDialog';
+import EditIncomeDialog from '../components/Dialog/EditIncomeDialog';
+import { EqualApproximately } from 'lucide-react';
 
 const Incomes = () => {
-    const { incomes, addIncome, fetchIncomes, removeIncome, updateIncome, getIncome } = useIncomeStore();
+    const { incomes, addIncome, fetchIncomes, removeIncome, updateIncome } = useIncomeStore();
+    const [searchTerm, setSearchTerm] = useState('');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
     const [selectedIncome, setSelectedIncome] = useState(null);
+
     const tableHeads = [
         'Başlık', 'Tutar', 'Para Birimi', 'Kategori', 'Tarih', 'Açıklama', 'Tekrarlama Düzeni'
     ];
 
-    const [newIncome, setNewIncome] = useState({
-        title: '',
-        amount: 0,
-        currency: 'TRY',
-        category: '',
-        date: '',
-        description: '',
-        recurrence: 'Günlük',
-    });
-
-    const handleAddIncome = () => {
-        addIncome(newIncome);
-        setIsDialogOpen(false);
-        setNewIncome({
-            title: '',
-            amount: 0,
-            currency: 'TRY',
-            category: '',
-            date: '',
-            description: '',
-            recurrence: 'Günlük',
-        });
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
     };
 
-    const handleUpdateIncome = () => {
-        if (selectedIncome) {
-            updateIncome(selectedIncome.id, selectedIncome);
-            setIsEditDialogOpen(false);
-            setSelectedIncome(null);
-        }
-    }
+    const filteredIncomes = incomes.filter((income) =>
+        income.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     useEffect(() => {
         fetchIncomes();
@@ -73,14 +36,6 @@ const Incomes = () => {
         setSelectedIncome(income);
         setIsEditDialogOpen(true);
     };
-
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
-    };
-
-    const filteredIncomes = incomes.filter((income) =>
-        income.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
     const exportToExcel = () => {
         const worksheet = XLSX.utils.json_to_sheet(incomes);
@@ -96,7 +51,9 @@ const Incomes = () => {
     return (
         <div className="p-4">
             <div className="flex justify-between gap-4 mb-4">
-                <Button className='btn primary-btn !w-auto !min-w-44' onClick={exportToExcel}>Excel İndir</Button>
+                {filteredIncomes.length !== 0 && (
+                    <Button className='btn primary-btn !w-auto !min-w-44' onClick={exportToExcel}>Excel İndir</Button>
+                )}
                 <Input
                     type="text"
                     placeholder="Ara..."
@@ -107,152 +64,32 @@ const Incomes = () => {
                 <Button className='btn primary-btn !w-auto !min-w-44' onClick={() => setIsDialogOpen(true)}>Ekle</Button>
             </div>
 
-            <BigTable
-                data={filteredIncomes}
-                heads={tableHeads}
-                removeFunction={removeIncome}
-                openEditDialog={openEditDialog}
+            {filteredIncomes.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12">
+                    <EqualApproximately className="text-primaryColor" size={80} />
+                    <p className="text-2xl mt-2 text-primaryColor">Henüz bir geliriniz yok !</p>
+                </div>
+            ) : (
+                <BigTable
+                    data={filteredIncomes}
+                    heads={tableHeads}
+                    removeFunction={removeIncome}
+                    openEditDialog={openEditDialog}
+                />
+            )}
+
+            <AddIncomeDialog
+                isOpen={isDialogOpen}
+                onClose={() => setIsDialogOpen(false)}
+                addIncome={addIncome}
             />
 
-            {/* Add Dialog */}
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Yeni Gelir Ekle</DialogTitle>
-                    </DialogHeader>
-
-                    <div className="grid gap-4 py-4">
-                        <Input
-                            placeholder="Başlık"
-                            value={newIncome.title}
-                            onChange={(e) => setNewIncome({ ...newIncome, title: e.target.value })}
-                        />
-                        <Input
-                            placeholder="Tutar"
-                            type="number"
-                            value={newIncome.amount}
-                            onChange={(e) => setNewIncome({ ...newIncome, amount: parseFloat(e.target.value) || 0 })}
-                        />
-                        <Select
-                            value={newIncome.currency}
-                            onValueChange={(value) => setNewIncome({ ...newIncome, currency: value })}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Para Birimi" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="TRY">TRY</SelectItem>
-                                <SelectItem value="EUR">EUR</SelectItem>
-                                <SelectItem value="USD">USD</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Input
-                            placeholder="Kategori"
-                            value={newIncome.category}
-                            onChange={(e) => setNewIncome({ ...newIncome, category: e.target.value })}
-                        />
-                        <Input
-                            placeholder="Tarih"
-                            type="date"
-                            value={newIncome.date}
-                            onChange={(e) => setNewIncome({ ...newIncome, date: e.target.value })}
-                        />
-                        <Input
-                            placeholder="Açıklama"
-                            value={newIncome.description}
-                            onChange={(e) => setNewIncome({ ...newIncome, description: e.target.value })}
-                        />
-
-                        <Select
-                            value={newIncome.recurrence}
-                            onValueChange={(value) => setNewIncome({ ...newIncome, recurrence: value })}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Tekrarlama Düzeni" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="Günlük">Günlük</SelectItem>
-                                <SelectItem value="Aylık">Aylık</SelectItem>
-                                <SelectItem value="Yıllık">Yıllık</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    <DialogFooter>
-                        <Button className='btn primary-btn' onClick={handleAddIncome}>Ekle</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-
-            {/* Edit Dialog */}
-            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Yeni Gelir Ekle</DialogTitle>
-                    </DialogHeader>
-
-                    <div className="grid gap-4 py-4">
-                        <Input
-                            placeholder="Başlık"
-                            value={selectedIncome?.title}
-                            onChange={(e) => setSelectedIncome({ ...selectedIncome, title: e.target.value })}
-                        />
-                        <Input
-                            placeholder="Tutar"
-                            type="number"
-                            value={selectedIncome?.amount}
-                            onChange={(e) => setSelectedIncome({ ...selectedIncome, amount: parseFloat(e.target.value) || 0 })}
-                        />
-                        <Select
-                            value={selectedIncome?.currency}
-                            onValueChange={(value) => setSelectedIncome({ ...selectedIncome, currency: value })}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Para Birimi" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="TRY">TRY</SelectItem>
-                                <SelectItem value="EUR">EUR</SelectItem>
-                                <SelectItem value="USD">USD</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Input
-                            placeholder="Kategori"
-                            value={selectedIncome?.category}
-                            onChange={(e) => setSelectedIncome({ ...selectedIncome, category: e.target.value })}
-                        />
-                        <Input
-                            placeholder="Tarih"
-                            type="date"
-                            value={selectedIncome?.date}
-                            onChange={(e) => setSelectedIncome({ ...selectedIncome, date: e.target.value })}
-                        />
-                        <Input
-                            placeholder="Açıklama"
-                            value={selectedIncome?.description}
-                            onChange={(e) => setSelectedIncome({ ...selectedIncome, description: e.target.value })}
-                        />
-
-                        <Select
-                            value={selectedIncome?.recurrence}
-                            onValueChange={(value) => setSelectedIncome({ ...selectedIncome, recurrence: value })}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Tekrarlama Düzeni" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="Günlük">Günlük</SelectItem>
-                                <SelectItem value="Aylık">Aylık</SelectItem>
-                                <SelectItem value="Yıllık">Yıllık</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    <DialogFooter>
-                        <Button className='btn primary-btn' onClick={handleUpdateIncome}>Ekle</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+            <EditIncomeDialog
+                isOpen={isEditDialogOpen}
+                onClose={() => setIsEditDialogOpen(false)}
+                income={selectedIncome}
+                updateIncome={updateIncome}
+            />
         </div>
     );
 };

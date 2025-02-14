@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { collection, addDoc, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import { getAuth } from "firebase/auth";
+import { toast } from "@/hooks/use-toast";
 
 type Income = {
   id?: string;
@@ -48,6 +49,7 @@ export const useIncomeStore = create<IncomeState>((set) => ({
       set((state) => ({
         incomes: [...state.incomes, { ...income, id: docRef.id }],
       }));
+      toast({ description: 'Geliriniz başarıyla eklendi !' });
     }
   },
 
@@ -60,6 +62,7 @@ export const useIncomeStore = create<IncomeState>((set) => ({
       set((state) => ({
         incomes: state.incomes.filter((income) => income.id !== id),
       }));
+      toast({ description: 'Geliriniz başarıyla silindi !' });
     }
   },
 
@@ -75,6 +78,7 @@ export const useIncomeStore = create<IncomeState>((set) => ({
           income.id === id ? { ...income, ...updatedIncome } : income
         ),
       }));
+      toast({ description: 'Geliriniz başarıyla güncellendi !' });
     }
   },
 }));
