@@ -8,6 +8,7 @@ import {
   User,
 } from "firebase/auth";
 import { auth, googleProvider } from "../services/firebase";
+import { toast } from "@/hooks/use-toast";
 
 type AuthState = {
   user: User | null;
@@ -34,6 +35,7 @@ export const useAuthStore = create<AuthState>((set) => {
         set({ user: userCredential.user });
       } catch (error) {
         console.error("Login Error:", error);
+        toast({ description: 'Lütfen bilgilerinizi kontrol edin !' });
       }
     },
 
@@ -43,6 +45,7 @@ export const useAuthStore = create<AuthState>((set) => {
         set({ user: userCredential.user });
       } catch (error) {
         console.error("Registration Error:", error);
+        toast({ description: 'Lütfen bilgilerinizi kontrol edin !' });
       }
     },
 
@@ -52,6 +55,7 @@ export const useAuthStore = create<AuthState>((set) => {
         set({ user: result.user });
       } catch (error) {
         console.error("Google Login Error:", error);
+        toast({ description: 'Lütfen bilgilerinizi kontrol edin !' });
       }
     },
 
@@ -61,6 +65,7 @@ export const useAuthStore = create<AuthState>((set) => {
         set({ user: null });
       } catch (error) {
         console.error("Logout Error:", error);
+        toast({ description: 'Bir hata ile karşılaştık !' });
       }
     },
 

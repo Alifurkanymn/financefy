@@ -40,7 +40,7 @@ const Login = (props: Props) => {
     };
 
     return (
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="w-full h-screen flex justify-center items-center bg-white">
                 <Card className="w-[450px] border-0 shadow-none">
                     <CardHeader>
@@ -113,7 +113,7 @@ const Login = (props: Props) => {
                     </CardFooter>
                 </Card>
             </div>
-            <div className="hidden md:block bg-gradient">
+            <div className="hidden lg:block bg-gradient">
                 <div className="h-full w-full flex items-center justify-center">
                     <Image
                         className="hover:scale-105 transition-all duration-300"

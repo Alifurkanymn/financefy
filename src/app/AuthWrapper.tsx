@@ -20,7 +20,7 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
     }, [setUser]);
 
     useEffect(() => {
-        if (!loading && !user) {
+        if (!loading && !user && pathname !== "/register") {
             router.push("/login");
         }
     }, [user, router, pathname, loading]);

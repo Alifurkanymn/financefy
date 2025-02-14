@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { FaGoogle } from "react-icons/fa";
 import Image from "next/image";
 import { useAuthStore } from "@/lib/store/authStore";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
@@ -15,6 +16,7 @@ const Register = (props: Props) => {
     const { register } = useAuthStore();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const router = useRouter();
 
     const handleRegister = async () => {
         if (email && password) {
@@ -25,7 +27,7 @@ const Register = (props: Props) => {
     };
 
     return (
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="w-full h-screen flex justify-center items-center bg-white">
                 <Card className="w-[450px] border-0 shadow-none">
                     <CardHeader>
@@ -76,10 +78,21 @@ const Register = (props: Props) => {
                         <Button className="btn primary-btn" onClick={handleRegister}>
                             Kayıt Ol
                         </Button>
+                        <div className="flex items-center mt-8">
+                            <p className="text-black">Hesabın var mı ?</p>
+                            <button
+                                className="text-start text-primaryColor font-bold ms-3 rounded"
+                                onClick={() => {
+                                    router.push("/login");
+                                }}
+                            >
+                                Giriş Sayfasına Dön
+                            </button>
+                        </div>
                     </CardFooter>
                 </Card>
             </div>
-            <div className="hidden md:block bg-gradient">
+            <div className="hidden lg:block bg-gradient">
                 <div className="h-full w-full flex items-center justify-center">
                     <Image
                         className="hover:scale-105 transition-all duration-300"

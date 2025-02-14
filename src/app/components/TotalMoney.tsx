@@ -7,10 +7,10 @@ const TotalMoney = ({ netTotal }) => {
     return (
         <div className="total w-full flex flex-col items-end">
             <Card className="bg-green-600 w-max">
-                <CardHeader className="flex flex-row items-center gap-4">
-                    <Wallet className="text-white" size={48} />
+                <CardHeader className="flex flex-row items-center gap-4 p-4 lg:p-6">
+                    <Wallet className="text-white" size={24} />
                     <div className="!mt-0">
-                        <CardTitle className="text-xl text-white">{netTotal} TL</CardTitle>
+                        <CardTitle className="text-lg lg:text-2xl text-white">{netTotal} TL</CardTitle>
                     </div>
                 </CardHeader>
             </Card>
