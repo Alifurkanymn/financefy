@@ -29,7 +29,7 @@ const Incomes = () => {
 
     useEffect(() => {
         fetchIncomes();
-    }, []);
+    }, [fetchIncomes]);
 
     const openEditDialog = (income) => {
         setSelectedIncome(income);

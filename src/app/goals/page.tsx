@@ -16,7 +16,7 @@ const Goals = () => {
 
     useEffect(() => {
         fetchGoals();
-    }, []);
+    }, [fetchGoals]);
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);

@@ -20,7 +20,7 @@ const Expenses = () => {
     ];
     useEffect(() => {
         fetchExpenses();
-    }, []);
+    }, [fetchExpenses]);
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
