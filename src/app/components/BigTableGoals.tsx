@@ -3,13 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 type BigTableGoalsProps = {
-    data: any[];
+    data: unknown[];
     heads: string[];
     removeGoal: (id: string) => void;
-    openEditDialog: (goal: any) => void;
 };
 
-const BigTableGoals = ({ data, heads, removeGoal, openEditDialog }: BigTableGoalsProps) => {
+const BigTableGoals = ({ data, heads, removeGoal }: BigTableGoalsProps) => {
     const formatAmount = (amount: number) => {
         return new Intl.NumberFormat('tr-TR', {
             style: 'currency',

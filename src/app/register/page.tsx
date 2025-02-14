@@ -5,14 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FaGoogle } from "react-icons/fa";
 import Image from "next/image";
 import { useAuthStore } from "@/lib/store/authStore";
 import { useRouter } from "next/navigation";
 
-type Props = {};
-
-const Register = (props: Props) => {
+const Register = () => {
     const { register } = useAuthStore();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -40,7 +37,7 @@ const Register = (props: Props) => {
                                 height={60}
                             />
                         </div>
-                        <CardTitle className="text-4xl text-center">Financefy'a Hoş Geldin !</CardTitle>
+                        <CardTitle className="text-4xl text-center">Financefy&apos;a Hoş Geldin !</CardTitle>
                         <CardDescription className="text-md !mt-0 text-center">Kayıt ol</CardDescription>
                     </CardHeader>
                     <CardContent>

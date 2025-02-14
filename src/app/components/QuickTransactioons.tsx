@@ -1,11 +1,10 @@
 import React from 'react'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { CoinsIcon, EqualApproximately, Goal, HandCoins, Landmark, Wallet } from "lucide-react";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Goal, HandCoins, Landmark } from "lucide-react";
 import Link from "next/link";
 
-type Props = {}
 
-const QuickTransactioons = (props: Props) => {
+const QuickTransactioons = () => {
     return (
         <div className="quick-transactions">
             <h1 className="text-2xl text-black font-bold mb-3">Hızlı İşlemler</h1>

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -17,9 +16,7 @@ import { useGoalStore } from '@/lib/store/useGoalStore';
 import TableSkeleton from '../components/TableSkeleton';
 import { EqualApproximately } from 'lucide-react';
 
-type Props = {}
-
-const Summary = (props: Props) => {
+const Summary = () => {
     const { incomes, fetchIncomes } = useIncomeStore();
     const { expenses, fetchExpenses } = useExpenseStore();
     const { goals, fetchGoals } = useGoalStore();

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useIncomeStore } from "@/lib/store/useIncomeStore";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import BigTable from '../components/BigTable';
 import AddIncomeDialog from '../components/Dialog/AddIncomeDialog';
 import EditIncomeDialog from '../components/Dialog/EditIncomeDialog';

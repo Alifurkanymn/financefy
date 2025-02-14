@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import SideBar from "./components/SideBar";
 import AuthWrapper from "./AuthWrapper";
 import { Toaster } from "@/components/ui/toaster";
 

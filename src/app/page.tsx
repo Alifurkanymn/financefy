@@ -1,14 +1,12 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { CoinsIcon, EqualApproximately, Goal, HandCoins, Landmark, Wallet } from "lucide-react";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EqualApproximately } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useIncomeStore } from "@/lib/store/useIncomeStore";
 import { useExpenseStore } from "@/lib/store/useExpensesStore";
 import { useGoalStore } from "@/lib/store/useGoalStore";
-import Link from "next/link";
 import TableSkeleton from "./components/TableSkeleton";
 import QuickTransactioons from "./components/QuickTransactioons";
 import TotalMoney from "./components/TotalMoney";

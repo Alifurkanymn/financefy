@@ -1,6 +1,6 @@
 import React from 'react'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { CoinsIcon, EqualApproximately, Goal, HandCoins, Landmark, Wallet } from "lucide-react";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Wallet } from "lucide-react";
 
 
 const TotalMoney = ({ netTotal }) => {

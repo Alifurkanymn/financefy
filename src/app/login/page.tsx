@@ -9,12 +9,8 @@ import { FaGoogle } from "react-icons/fa";
 import Image from "next/image";
 import { useAuthStore } from "@/lib/store/authStore";
 import { useRouter } from "next/navigation";
-import { auth, googleProvider } from "@/lib/services/firebase";
-import { signInWithPopup } from "firebase/auth";
 
-type Props = {};
-
-const Login = (props: Props) => {
+const Login = () => {
     const { user, login, loginWithGoogle } = useAuthStore();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -53,7 +49,7 @@ const Login = (props: Props) => {
                                 height={60}
                             />
                         </div>
-                        <CardTitle className="text-4xl text-center">Financefy'a Hoş Geldin !</CardTitle>
+                        <CardTitle className="text-4xl text-center">Financefy&apos;a Hoş Geldin !</CardTitle>
                         <CardDescription className="text-md !mt-0 text-center">Financefy ile yönet, kaydet, analiz et !</CardDescription>
                     </CardHeader>
                     <CardContent>

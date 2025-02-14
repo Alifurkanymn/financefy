@@ -1,18 +1,16 @@
 'use client'
 
 import React, { useState } from 'react'
-import { HandCoins, DiamondPercent, ChartColumnDecreasing, House, Goal, Landmark, LogOut, MenuIcon } from 'lucide-react'
+import { HandCoins, DiamondPercent, House, Goal, Landmark, LogOut, MenuIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useAuthStore } from '@/lib/store/authStore'
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
-type Props = {}
 
-const SideBar = (props: Props) => {
+const SideBar = () => {
     const { logout } = useAuthStore()
     const router = useRouter()
 

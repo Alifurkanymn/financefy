@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { useGoalStore } from '@/lib/store/useGoalStore';
 import BigTableGoals from '../components/BigTableGoals';
 import AddGoalDialog from '../components/Dialog/AddGoalDialog';
-import { EqualApproximately, Goal } from 'lucide-react';
+import { Goal } from 'lucide-react';
 
 const Goals = () => {
     const { goals, fetchGoals, removeGoal } = useGoalStore();

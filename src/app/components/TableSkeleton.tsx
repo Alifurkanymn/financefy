@@ -1,9 +1,7 @@
 import { Skeleton } from '@/components/ui/skeleton'
 import React from 'react'
 
-type Props = {}
-
-const TableSkeleton = (props: Props) => {
+const TableSkeleton = () => {
     return (
         <div className="flex items-center space-x-4 w-full">
             <div className="space-y-2 w-full">

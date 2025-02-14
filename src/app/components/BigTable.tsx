@@ -3,10 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 type BigTableProps = {
-    data: any[];
+    data: unknown[];
     heads: string[];
     removeIncome: (id: string) => void;
-    openEditDialog: (income: any) => void;
+    openEditDialog: (income: unknown) => void;
 };
 
 const BigTable = ({ data, heads, removeFunction, openEditDialog }: BigTableProps) => {
