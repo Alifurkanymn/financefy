@@ -24,7 +24,7 @@ const BigTable = ({ data, heads, removeFunction, openEditDialog }: BigTableProps
             year: 'numeric',
             month: '2-digit',
             day: '2-digit'
-        }).format(parsedDate).replace(/\./g, '.'); // "yyyy.mm.dd" formatına uygun
+        }).format(parsedDate).replace(/\./g, '.');
     };
     return (
         <Table>

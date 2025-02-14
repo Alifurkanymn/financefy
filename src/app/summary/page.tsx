@@ -15,7 +15,6 @@ import { useIncomeStore } from '@/lib/store/useIncomeStore';
 import { useExpenseStore } from '@/lib/store/useExpensesStore';
 import { useGoalStore } from '@/lib/store/useGoalStore';
 import TableSkeleton from '../components/TableSkeleton';
-import { Goal } from 'react-feather'; // Assuming you're using this icon or similar
 import { EqualApproximately } from 'lucide-react';
 
 type Props = {}
