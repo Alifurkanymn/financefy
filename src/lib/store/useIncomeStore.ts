@@ -3,17 +3,7 @@ import { collection, addDoc, deleteDoc, doc, getDocs, updateDoc } from "firebase
 import { db } from "../services/firebase";
 import { getAuth } from "firebase/auth";
 import { toast } from "@/hooks/use-toast";
-
-type Income = {
-  id: string;
-  title: string;
-  amount: number;
-  currency: string;
-  category: string;
-  date: string;
-  description: string;
-  recurrence: string;
-};
+import { Income } from "@/app/types/types";
 
 type IncomeState = {
   incomes: Income[];
@@ -45,7 +35,11 @@ export const useIncomeStore = create<IncomeState>((set) => ({
     const userId = auth.currentUser?.uid;
 
     if (userId) {
-      const docRef = await addDoc(collection(db, "users", userId, "incomes"), income);
+      const docRef = await addDoc(collection(db, "users", userId, "incomes"), {
+        ...income,
+        id: "" 
+      });
+      await updateDoc(docRef, { id: docRef.id });
       set((state) => ({
         incomes: [...state.incomes, { ...income, id: docRef.id }],
       }));

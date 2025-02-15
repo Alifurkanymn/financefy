@@ -95,6 +95,19 @@ const AddExpenseDialog = ({ isOpen, onClose, addExpense }: AddExpenseDialogProps
                         value={newExpense.description}
                         onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })}
                     />
+                    <Select
+                        value={newExpense.recurrence}
+                        onValueChange={(value) => setNewExpense({ ...newExpense, recurrence: value })}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Tekrarlama Düzeni" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="Günlük">Günlük</SelectItem>
+                            <SelectItem value="Aylık">Aylık</SelectItem>
+                            <SelectItem value="Yıllık">Yıllık</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
 
                 <DialogFooter>

@@ -41,6 +41,7 @@ const Goals = () => {
 
     return (
         <div className='p-4'>
+            <h1 className="text-2xl text-black font-bold mb-3">Hedefler</h1>
             <div className="flex flex-col lg:flex-row justify-between gap-4 mb-4">
                 <div className='flex items-center justify-between'>
                     {filteredGoals.length !== 0 && (

@@ -3,17 +3,7 @@ import { collection, addDoc, deleteDoc, doc, getDocs, updateDoc } from "firebase
 import { db } from "../services/firebase";
 import { getAuth } from "firebase/auth";
 import { toast } from "@/hooks/use-toast";
-
-type Expense = {
-  id: string;
-  title: string;
-  amount: number;
-  currency: string;
-  category: string;
-  date: string;
-  description: string;
-  recurrence: string;
-};
+import { Expense } from "@/app/types/types";
 
 type ExpenseState = {
   expenses: Expense[];
@@ -47,7 +37,11 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
     const userId = auth.currentUser?.uid;
 
     if (userId) {
-      const docRef = await addDoc(collection(db, "users", userId, "expenses"), expense);
+      const docRef = await addDoc(collection(db, "users", userId, "expenses"), {
+        ...expense,
+        id: "" 
+      });
+      await updateDoc(docRef, { id: docRef.id });
       set((state) => ({
         expenses: [...state.expenses, { ...expense, id: docRef.id }],
       }));

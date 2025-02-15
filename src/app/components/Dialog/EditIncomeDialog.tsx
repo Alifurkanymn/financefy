@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Income } from '@/app/types/types';
+import { NumericFormat } from 'react-number-format';
 
 interface EditIncomeDialogProps {
     isOpen: boolean;
@@ -52,11 +53,16 @@ const EditIncomeDialog = ({ isOpen, onClose, income, updateIncome }: EditIncomeD
                         value={editedIncome.title}
                         onChange={(e) => setEditedIncome({ ...editedIncome, title: e.target.value })}
                     />
-                    <Input
-                        placeholder="Tutar"
-                        type="number"
+                    <NumericFormat
+                        placeholder="Gelir Tutarı"
                         value={editedIncome.amount}
-                        onChange={(e) => setEditedIncome({ ...editedIncome, amount: parseFloat(e.target.value) || 0 })}
+                        onValueChange={(values) => setEditedIncome({ ...editedIncome, amount: values.floatValue || 0 })}
+                        thousandSeparator="."
+                        decimalSeparator=","
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                        prefix="₺"
+                        className="px-4 py-2 rounded-md border w-full outline-none"
                     />
                     <Select
                         value={editedIncome.currency}

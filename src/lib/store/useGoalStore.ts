@@ -3,18 +3,8 @@ import { collection, addDoc, deleteDoc, doc, getDocs, updateDoc } from "firebase
 import { db } from "../services/firebase";
 import { getAuth } from "firebase/auth";
 import { toast } from "@/hooks/use-toast";
+import { Goal } from "@/app/types/types";
 
-type Goal = {
-  id: string;
-  title: string;
-  targetAmount: number;
-  currency: string;
-  startDate: string;
-  currentSaving: number;
-  category: string;
-  description: string;
-  status: string;
-};
 
 type GoalState = {
   goals: Goal[];
@@ -48,7 +38,11 @@ export const useGoalStore = create<GoalState>((set, get) => ({
     const userId = auth.currentUser?.uid;
 
     if (userId) {
-      const docRef = await addDoc(collection(db, "users", userId, "goals"), goal);
+      const docRef = await addDoc(collection(db, "users", userId, "goals"), {
+        ...goal,
+        id: "" 
+      });
+      await updateDoc(docRef, { id: docRef.id });
       set((state) => ({
         goals: [...state.goals, { ...goal, id: docRef.id }],
       }));
