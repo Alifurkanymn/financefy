@@ -28,10 +28,10 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
     if (loading && pathname !== "/login") return <Loading />;
 
     return (
-        <div className="flex h-screen">
+        <div className="flex lg:h-screen overflow-y-auto">
             <div className={`flex flex-col lg:flex-row  ${user ? "p-4" : ""} gap-4 h-screen overflow-hidden w-full`}>
                 {user && <SideBar />}
-                <main className={`bg-white w-full rounded-lg shadow-xl overflow-y-auto ${user ? "p-6" : ""}`}>
+                <main className={`bg-white w-full rounded-lg shadow-xl lg:overflow-y-auto ${user ? "p-6" : ""}`}>
                     {children}
                 </main>
             </div>
